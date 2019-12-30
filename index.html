@@ -1,0 +1,509 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Physics Solver</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="needs/w3.css">
+    <link rel="icon" href="needs/esti_icon.png" type="image/x-icon">
+    <style>
+        header,
+        footer {
+            text-align: center;
+            padding-top: 45px;
+            padding-bottom: 45px;
+            background: linear-gradient(to bottom right, #e91e63, #ffeb3b);
+        }
+
+        header * {
+            line-height: 1em;
+            margin: 10px;
+        }
+
+        header img {
+            margin-bottom: 5px;
+        }
+
+        body>* .w3-content {
+            margin-top: 25px;
+            margin-bottom: 25px;
+            border: 2px solid gray;
+            border-radius: 10px;
+            transition: 0.5s;
+        }
+
+        footer .w3-content {
+            border: none;
+            padding-top: 25px;
+            padding-bottom: 25px;
+        }
+
+        .flex-inputs {
+            display: flex;
+            margin-bottom: 12px;
+        }
+
+        .flex-inputs input {
+            width: 100%;
+            height: 45px;
+        }
+
+        .flex-inputs input:first-child {
+            border-right: 1px solid black;
+            border-radius: 10px 0px 0px 10px;
+        }
+
+        .flex-inputs input:last-child {
+            border-left: 1px solid black;
+            border-radius: 0px 10px 10px 0px;
+        }
+
+        input {
+            border: 2px solid black;
+            border-radius: 5px;
+            padding-left: 5px;
+            margin-top: 2.5px;
+            margin-bottom: 2.5px;
+            transition: 0.5s;
+        }
+
+        input:focus {
+            border-color: #2196F3;
+            background: #ddffff;
+        }
+
+        input[disabled] {
+            background: white;
+            color: black;
+        }
+
+        .division-solution hr {
+            margin: 0px;
+            border: 1px solid black;
+        }
+
+        .formula,
+        .answer {
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 16px;
+            font-weight: bolder;
+            padding-left: 10px;
+            padding-right: 10px;
+            background: #ddffdd;
+            border: 2px solid #4CAF50;
+            border-radius: 32px;
+        }
+
+        .answer {
+            background: #ffeb3b;
+            border: 2px solid #e91e63;
+        }
+
+        .flex-cont {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding-bottom: 16px;
+        }
+
+        .flex-cont>* {
+            width: 100%;
+        }
+
+        .flex-cont>div:first-child {
+            border-right: 2px solid lightgray;
+        }
+
+        .solution {
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 16px;
+            font-weight: bolder;
+        }
+
+        .division-solution {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .division-solution>* {
+            padding: 2px;
+        }
+
+        .given {
+            display: inline-block;
+            text-align: left;
+            margin-top: 2px;
+        }
+
+        .given label {
+            font-size: 12px;
+            font-weight: bold;
+            font-family: 'Courier New', Courier, monospace;
+        }
+
+        @media (max-width: 600px) {
+            .flex-cont {
+                flex-direction: column;
+            }
+
+            .flex-cont>div:first-child {
+                border-right: unset;
+            }
+
+            h2 {
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <header class="w3-brown">
+        <img src="needs/esti_icon.png" width="80" height="auto">
+        <h1>Physics Problem Solver</h1>
+        <p class="w3-large">EDUCATIONAL SYSTEMS TECHNOLOGICAL INSTITUTE</p>
+        <p class="w3-small">MURALLON, BOAC, MARINDUQUE</p>
+    </header>
+
+    <article class="w3-container">
+        <div class="w3-content w3-card-4 w3-padding">
+            <h2>Direction</h2>
+            <hr>
+            <p>Your time's unit should only be in seconds. Your speed and velocity's unit should only be in meters per
+                second. You no longer have to convert your givens manually because this program has its own dedicated
+                converter below.</p>
+        </div>
+    </article>
+
+    <article class="w3-container">
+        <div class="w3-content w3-card-4 w3-light-gray w3-padding">
+            <h2>Converter</h2>
+            <div class="flex-inputs">
+                <input type="number" placeholder="Minutes" id="minutes" oninput="convert('ms')">
+                <input type="text" placeholder="Seconds" id="seconds0" disabled>
+            </div>
+            <div class="flex-inputs">
+                <input type="number" placeholder="Hours" id="hours" oninput="convert('hs')">
+                <input type="text" placeholder="Seconds" id="seconds1" disabled>
+            </div>
+            <div class="flex-inputs">
+                <input type="number" placeholder="Kilometers" id="kilometers" oninput="convert('kiloMeters')">
+                <input type="text" placeholder="Meters" id="meters_0" disabled>
+            </div>
+            <div class="flex-inputs">
+                <input type="number" placeholder="Miles" id="mil" oninput="convert('milMeters')">
+                <input type="text" placeholder="Meters" id="meters_1" disabled>
+            </div>
+            <div class="flex-inputs">
+                <input type="number" placeholder="Km/hr" id="kilo" oninput="convert('km')">
+                <input type="text" placeholder="M/S" id="meters" disabled>
+            </div>
+            <div class="flex-inputs">
+                <input type="number" placeholder="Miles/hr" id="miles" oninput="convert('miles')">
+                <input type="text" placeholder="M/S" id="meters1" disabled>
+            </div>
+        </div>
+    </article>
+
+    <article class="w3-container">
+        <div class="w3-content w3-card-4 w3-padding">
+            <h2>Speed</h2>
+            <div class="flex-cont">
+                <div class="w3-center">
+                    <h4>Formula:</h4>
+                    <p><span class="formula">s = d / t</span></p>
+                    <h4>Givens:</h4>
+                    <p>
+                        <span class="given">
+                            <label for="sDistance">Distance:</label><br>
+                            <input type="number" name="sDistance" id="sDistance" oninput="findSpeed()">
+                        </span>
+                        <span class="given">
+                            <label for="sTime">Time:</label><br>
+                            <input type="number" name="sTime" id="sTime" oninput="findSpeed()">
+                        </span>
+                    </p>
+                </div>
+                <div class="w3-center">
+                    <h4>Solution:</h4>
+                    <div class="solution">
+                        <div class="division-solution">
+                            <div>s =</div>
+                            <div>
+                                <div>d</div>
+                                <hr>
+                                <div>t</div>
+                            </div>
+                        </div>
+                        <div class="division-solution">
+                            <div>s =</div>
+                            <div>
+                                <div id="solSpeedDistance">???</div>
+                                <hr>
+                                <div id="solSpeedTime">???</div>
+                            </div>
+                        </div>
+                        <div><span class="answer">s = <span id="solSpeed">???</span></span></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </article>
+
+    <article class="w3-container">
+        <div class="w3-content w3-card-4 w3-light-gray w3-padding">
+            <h2>Distance</h2>
+            <p></p>
+            <div class="flex-cont">
+                <div class="w3-center">
+                    <h4>Formula:</h4>
+                    <p><span class="formula">d = s ● t</span></p>
+                    <h4>Givens:</h4>
+                    <p>
+                        <span class="given">
+                            <label for="dSpeed">Speed:</label><br>
+                            <input type="number" name="dSpeed" id="dSpeed" oninput="findDistance()">
+                        </span>
+                        <span class="given">
+                            <label for="dTime">Time:</label><br>
+                            <input type="number" name="dTime" id="dTime" oninput="findDistance()">
+                        </span>
+                    </p>
+                </div>
+                <div class="w3-center">
+                    <h4>Solution:</h4>
+                    <div class="solution">
+                        <div>
+                            d = s ● t
+                        </div>
+                        <div>
+                            <div>d = <span id="solDistanceSpeed">???</span> ● <span id="solDistanceTime">???</span>
+                            </div>
+                        </div>
+                        <div><span class="answer">d = <span id="solDistance">???</span></span></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </article>
+
+    <article class="w3-container">
+        <div class="w3-content w3-card-4 w3-padding">
+            <h2>Time</h2>
+            <div class="flex-cont">
+                <div class="w3-center">
+                    <h4>Formula:</h4>
+                    <p><span class="formula">t = d / s</span></p>
+                    <h4>Givens:</h4>
+                    <p>
+                        <span class="given">
+                            <label for="tDistance">Distance:</label><br>
+                            <input type="number" name="tDistance" id="tDistance" oninput="findTime()">
+                        </span>
+                        <span class="given">
+                            <label for="tSpeed">Speed:</label><br>
+                            <input type="number" name="tSpeed" id="tSpeed" oninput="findTime()">
+                        </span>
+                    </p>
+                </div>
+                <div class="w3-center">
+                    <h4>Solution:</h4>
+                    <div class="solution">
+                        <div class="division-solution">
+                            <div>t =</div>
+                            <div>
+                                <div>d</div>
+                                <hr>
+                                <div>s</div>
+                            </div>
+                        </div>
+                        <div class="division-solution">
+                            <div>t =</div>
+                            <div>
+                                <div id="solTimeDistance">???</div>
+                                <hr>
+                                <div id="solTimeSpeed">???</div>
+                            </div>
+                        </div>
+                        <div><span class="answer">t = <span id="solTime">???</span></span></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </article>
+
+    <article class="w3-container">
+        <div class="w3-content w3-card-4 w3-light-gray w3-padding">
+            <h2>Acceleration</h2>
+            <div class="flex-cont">
+                <div class="w3-center">
+                    <h4>Formula:</h4>
+                    <p><span class="formula">a = (V<sub>f</sub> - V<sub>i</sub>) / t</span>
+                    </p>
+                    <h4>Givens:</h4>
+                    <p>
+                        <span class="given">
+                            <label for="aFinalVelocity">Final Velocity:</label><br>
+                            <input type="number" name="aFinalVelocity" id="aFinalVelocity" oninput="findAcceleration()">
+                        </span>
+                        <span class="given">
+                            <label for="aInitialVelocity">Initial Velocity:</label><br>
+                            <input type="number" name="aInitialVelocity" id="aInitialVelocity"
+                                oninput="findAcceleration()">
+                        </span>
+                        <span class="given">
+                            <label for="aTime">Time:</label><br>
+                            <input type="number" name="aTime" id="aTime" oninput="findAcceleration()">
+                        </span>
+                    </p>
+                </div>
+                <div class="w3-center">
+                    <h4>Solution:</h4>
+                    <div class="solution">
+                        <div class="division-solution">
+                            <div>a =</div>
+                            <div>
+                                <div>V<sub>f</sub> - V<sub>i</sub></div>
+                                <hr>
+                                <div>t</div>
+                            </div>
+                        </div>
+                        <div class="division-solution">
+                            <div>a =</div>
+                            <div>
+                                <div><span id="solAcFV">???</span> - <span id="solAcIV">???</span></div>
+                                <hr>
+                                <div class="solAcTime">???</div>
+                            </div>
+                        </div>
+                        <div class="division-solution">
+                            <div>a =</div>
+                            <div>
+                                <div id="solAcChange">???</div>
+                                <hr>
+                                <div class="solAcTime">???</div>
+                            </div>
+                        </div>
+                        <div><span class="answer">a = <span id="solAc">???</span></span></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </article>
+
+    <article class="w3-container">
+        <div class="w3-content w3-card-4 w3-padding">
+            <h2>Displacement</h2>
+            <p></p>
+            <div class="flex-cont">
+                <div class="w3-center">
+                    <h4>Formula:</h4>
+                    <p><span class="formula">Δs = v ● Δt</span></p>
+                    <h4>Givens:</h4>
+                    <p>
+                        <span class="given">
+                            <label for="dVelocity">Velocity:</label><br>
+                            <input type="number" name="dVelocity" id="dVelocity" oninput="findDisplacement()">
+                        </span>
+                        <span class="given">
+                            <label for="dChangeInTime">Change in Time:</label><br>
+                            <input type="number" name="dChangeInTime" id="dChangeInTime" oninput="findDisplacement()">
+                        </span>
+                    </p>
+                </div>
+                <div class="w3-center">
+                    <h4>Solution:</h4>
+                    <div class="solution">
+                        <div>Δs = v ● Δt</div>
+                        <div>
+                            <div>Δs = <span id="solDisplacementVelocity">???</span> ● <span
+                                    id="solDisplacementTime">???</span></div>
+                        </div>
+                        <div><span class="answer">Δs = <span id="solDisplacement">???</span></span></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </article>
+
+    <article class="w3-container">
+        <div class="w3-content w3-card-4 w3-light-gray w3-padding">
+            <h2>Velocity</h2>
+            <div class="flex-cont">
+                <div class="w3-center">
+                    <h4>Formula:</h4>
+                    <p><span class="formula">v = Δs / Δt</span></p>
+                    <h4>Givens:</h4>
+                    <p>
+                        <span class="given">
+                            <label for="vDisplacement">Displacement:</label><br>
+                            <input type="number" name="vDisplacement" id="vDisplacement" oninput="findVelocity()">
+                        </span>
+                        <span class="given">
+                            <label for="vTime">Change in Time:</label><br>
+                            <input type="number" name="vTime" id="vTime" oninput="findVelocity()">
+                        </span>
+                    </p>
+                </div>
+                <div class="w3-center">
+                    <h4>Solution:</h4>
+                    <div class="solution">
+                        <div class="division-solution">
+                            <div>v =</div>
+                            <div>
+                                <div>Δs</div>
+                                <hr>
+                                <div>Δt</div>
+                            </div>
+                        </div>
+                        <div class="division-solution">
+                            <div>v =</div>
+                            <div>
+                                <div id="solVelocityDisplacement">???</div>
+                                <hr>
+                                <div id="solVelocityTime">???</div>
+                            </div>
+                        </div>
+                        <div><span class="answer">v = <span id="solVelocity">???</span></span></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </article>
+
+    <article class="w3-container">
+        <div class="w3-content w3-card-4 w3-padding">
+            <div class="w3-row w3-center w3-large">
+                <div class="w3-col m6">
+                    <h2>Technologies used</h2>
+                    <p><b>HTML</b> ● for the structure.</p>
+                    <p><b>W3.CSS</b> ● a framework provided by W3Schools.com for fast designing.</p>
+                    <p><b>JavaScript</b> ● for scripting the program.</p>
+                </div>
+                <div class="w3-col m6">
+                    <h2>Programmers</h2>
+                    <p>Justine Siena</p>
+                    <p>Xylem Opeña</p>
+                    <p>Ricky Lining</p>
+                    <p>Melody Magsisi</p>
+                    <p>Jhecerille Andrade</p>
+                    <p>Rayllan Race</p>
+                </div>
+            </div>
+        </div>
+    </article>
+
+    <footer class="w3-container w3-center w3-text-white">
+        <div class="w3-content">
+            <h1>"Be nice to nerds, chances are, you might end up working for one."</h1>
+            <p>- Bill Gates</p>
+        </div>
+    </footer>
+
+    <script src="needs/script.js"></script>
+
+</body>
+
+</html>
